@@ -1,0 +1,6 @@
+1$5$1$1$2002$4$Medicina General$3$2$
+2$2$6$3$2006$2$Ortometria$3$2$
+3$1$2$3$2006$2$Pediatria$3$2$
+4$2$25$5$2006$16$Neurología$3$2$
+5$2$15$1$2001$5$Medicina$7$0$
+6$3$12$12$12$4$Oftalmologia$5$0$

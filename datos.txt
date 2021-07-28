@@ -1,0 +1,5 @@
+1&juan&perez&987654321&juan@unsa.edu.pe&CalleCusco&juan&poir&1&
+2&chris&ilas&987654321&ilas@unsa.edu.pe&CalleCusco&chris&qwerty&0&
+3&brus&pez&987654321&brus@unsa.edu.pe&CalleCusco&brus&1234&1&
+4&pedro&perez&987654321&dro@unsa.edu.pe&CalleCusco&pedro&cpdro&1&
+5&luis&padro&987654321&juan@unsa.edu.pe&CalleCusco&luis&luis123&0&
