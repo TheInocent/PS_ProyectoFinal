@@ -1,4 +1,7 @@
 #include "consulta.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 
 //Charge data one y charge data all hacen que se llene el array de struct de las citas
 void load_one_user(int posicion, string linea)
@@ -199,24 +202,24 @@ void select_cita_paciente(int id_paciente)
     {
         if (appointment_list[i].id_paciente == id_paciente)
         {
-            cout << "El ID de la cita: " << appointment_list[i].id_cita << endl;
-            cout << "Especialidad: " << appointment_list[i].especialidad << endl;
+            cout << "\tEl ID de la cita: " << appointment_list[i].id_cita << endl;
+            cout << "\tEspecialidad: " << appointment_list[i].especialidad << endl;
             switch (appointment_list[i].condicion)
             { //0 = Pendiente 1 = Aceptada 2 = No acpetada 3 = Concluida
             case 0:
-                cout << "ESTADO: PENDIENTE" << endl;
+                cout << "\tESTADO: PENDIENTE" << endl;
                 break;
             case 1:
-                cout << "ESTADO: ACEPTADA" << endl;
+                cout << "\tESTADO: ACEPTADA" << endl;
                 break;
             case 2:
-                cout << "ESTADO: NO ACEPTADA" << endl;
+                cout << "\tESTADO: NO ACEPTADA" << endl;
                 break;
             case 3:
-                cout << "ESTADO: NO CONCLUIDA" << endl;
+                cout << "\tESTADO: NO CONCLUIDA" << endl;
                 break;
             }
-            cout << "Fecha: " << appointment_list[i].dia << appointment_list[i].mes << appointment_list[i].anio << endl;
+            cout << "\tFecha: " << appointment_list[i].dia << appointment_list[i].mes << appointment_list[i].anio << endl;
         }
     }
     cout << "=============================" << endl;
@@ -290,105 +293,196 @@ void basic_user_modify()
 
     } while (!realizado);
 }
-
+void change_appointment_condition() {
+    int pos_to_modify = -1;
+    int menu_aux;
+    int input_aux;
+    bool realizado = false;
+    cout << "\n\tSeleccione el ID de la cita a cambiar condicion" << endl;
+    cin >> pos_to_modify;
+    do
+    {
+        cout << "\n\tA que condicion quiere cambiar la cita \n" << endl;
+        cout << "\t1. Aceptada" << endl;
+        cout << "\t2. No aceptada" << endl;
+        cout << "\t3. Concluida" << endl;
+        cout << "\t4. Salir" << endl;
+        cin >> input_aux;
+        if (input_aux == 1 || input_aux == 2 || input_aux == 1 ) 
+        {
+            appointment_list[pos_to_modify - 1].condicion = input_aux;
+            cout << "\tCondicion de cita cambiada con exito !!!" << endl;
+            system("cls");
+            menu_moderator_user();
+            break;
+        }
+        else if (input_aux == 4)
+        {
+            cout << "\tSaliendo ..." << endl;
+            system("cls");
+            menu_moderator_user();
+            break;
+        }
+        else 
+        {
+            cout << "\tOpcion invalida intente de nuevo . . . " << endl;
+        }
+    } while (!realizado);
+}
+void select_all_citas_pacientes() {
+    for (int i = 0; i < arr_length_user_list; i++)
+    {
+        cout << "\tPaciente: " << user_list[i].nombre << " " << user_list[i].apellido << endl;
+        select_cita_paciente(user_list[i].user_id);
+    }
+    
+}
 void select_citas_pendientes()
 {
-    cout << "CITAS PENDIENTES DE APROBACION" << endl;
     for (int i = 0; i < arr_length_appointment_list; i++)
     {
         if (appointment_list[i].condicion == 0)
         {
-            cout << "==========================================" << endl;
-            cout << "El ID de la cita: " << appointment_list[i].id_cita << endl;
-            cout << "ID Paciente: " << appointment_list[i].id_paciente << endl;
-            cout << "Especialidad: " << appointment_list[i].especialidad << endl;
-            cout << "Consultorio:" << appointment_list[i].consultorio << endl;
-            cout << "Fecha: " << appointment_list[i].dia << " / " << appointment_list[i].mes << " / " << appointment_list[i].anio << " Turno: " << appointment_list[i].turno << endl;
-            cout << "Condicion" << appointment_list[i].condicion << endl;
-            cout << "==========================================" << endl;
+            cout << "==========================================================" << endl;
+            cout << "\tEl ID de la cita: " << appointment_list[i].id_cita << endl;
+            cout << "\tID Paciente: " << appointment_list[i].id_paciente << endl;
+            cout << "\tEspecialidad: " << appointment_list[i].especialidad << endl;
+            cout << "\tConsultorio:" << appointment_list[i].consultorio << endl;
+            cout << "\tFecha: " << appointment_list[i].dia << " / " << appointment_list[i].mes << " / " << appointment_list[i].anio << " Turno: " << appointment_list[i].turno << endl;
+            cout << "\tCondicion: " << appointment_list[i].condicion << endl;
+            switch (appointment_list[i].condicion)
+            { //0 = Pendiente 1 = Aceptada 2 = No acpetada 3 = Concluida
+            case 0:
+                cout << "\tCondicion: PENDIENTE" << endl;
+                break;
+            case 1:
+                cout << "\tCondicion: ACEPTADA" << endl;
+                break;
+            case 2:
+                cout << "\tCondicion: NO ACEPTADA" << endl;
+                break;
+            case 3:
+                cout << "\tCondicion:: NO CONCLUIDA" << endl;
+                break;
+            }
+            cout << "==========================================================" << endl;
         }
     }
+    change_appointment_condition();
 }
 
-void list_citas()
+void select_citas()
 {
     cout << "LISTA DE TODAS LAS CITAS" << endl;
     for (int i = 0; i < arr_length_appointment_list; i++)
     {
-        cout << "==========================================" << endl;
-        cout << "ID Cita: " << appointment_list[i].id_cita << endl;
-        cout << "ID Paciente: " << appointment_list[i].id_paciente << endl;
-        cout << "Fecha: " << appointment_list[i].dia << " / " << appointment_list[i].mes << " / " << appointment_list[i].anio << " Turno: " << appointment_list[i].turno << endl;
-        cout << "Consultorio:" << appointment_list[i].consultorio << endl;
-        cout << "Condicion" << appointment_list[i].condicion << endl;
-        cout << "==========================================" << endl;
+        cout << "==========================================================" << endl;
+        cout << "\tID Cita: " << appointment_list[i].id_cita << endl;
+        cout << "\tID Paciente: " << appointment_list[i].id_paciente << endl;
+        cout << "\tFecha: " << appointment_list[i].dia << " / " << appointment_list[i].mes << " / " << appointment_list[i].anio << " Turno: " << appointment_list[i].turno << endl;
+        cout << "\tConsultorio:" << appointment_list[i].consultorio << endl;
+        cout << "\tCondicion: " << appointment_list[i].condicion << endl;
+        switch (appointment_list[i].condicion)
+        { //0 = Pendiente 1 = Aceptada 2 = No acpetada 3 = Concluida
+        case 0:
+            cout << "\tCondicion:: PENDIENTE" << endl;
+            break;
+        case 1:
+            cout << "\tCondicion:: ACEPTADA" << endl;
+            break;
+        case 2:
+            cout << "\tCondicion:: NO ACEPTADA" << endl;
+            break;
+        case 3:
+            cout << "\tCondicion:: NO CONCLUIDA" << endl;
+            break;
+        }
+        cout << "==========================================================" << endl;
     }
 }
 
 void moderator_user_modify()
-{
+{   
+    select_citas();
     int pos_to_modify = -1;
     int menu_aux;
     string input_aux;
     bool realizado = true;
-    //lista todas las citas
-    list_citas();
-    cout << "Seleccione el ID de la cita a modificar" << endl;
+    cout << "\tSeleccione el ID de la cita a modificar" << endl;
     cin >> pos_to_modify;
     do
     {
-        cout << "¿Qué dato desea modificar?" << endl;
-        cout << "1. Día" << endl;
-        cout << "2. Mes" << endl;
-        cout << "3. Hora" << endl;
-        cout << "4. Turno" << endl;
-        cout << "5. Especialidad" << endl;
-        cout << "6. Consultorio" << endl;
-        cout << "7. Condicion" << endl;
+        cout << "\t¿Qué dato desea modificar?\n" << endl;
+        cout << "\t1. Día" << endl;
+        cout << "\t2. Mes" << endl;
+        cout << "\t3. Hora" << endl;
+        cout << "\t4. Turno" << endl;
+        cout << "\t5. Especialidad" << endl;
+        cout << "\t6. Consultorio" << endl;
+        cout << "\t7. Condicion" << endl;
+        cout << "\t8. Salir\n" << endl;
         cin >> menu_aux;
         switch (menu_aux)
         {
         case 1:
-            cout << "Ingrese un nuevo dia: " << endl;
+            cout << "\tIngrese un nuevo dia: " << endl;
             cin >> input_aux;
             appointment_list[pos_to_modify - 1].dia = stoi(input_aux);
+            cout << "\tDia de cita modificado con exito !!!" << endl;
+            menu_moderator_user();
             break;
         case 2:
-            cout << "Ingrese un nuevo mes: " << endl;
+            cout << "\tIngrese un nuevo mes: " << endl;
             cin >> input_aux;
             appointment_list[pos_to_modify - 1].mes = stoi(input_aux);
+            cout << "\tMes de cita modificado con exito !!!" << endl;
+            menu_moderator_user();
             break;
         case 3:
-            cout << "Ingrese una nueva hora: " << endl;
+            cout << "\tIngrese una nueva hora: " << endl;
             cin >> input_aux;
             appointment_list[pos_to_modify - 1].hora = stoi(input_aux);
+            cout << "\tHora de cita modificado con exito !!!" << endl;
+            menu_moderator_user();
             break;
         case 4:
-            cout << "Ingrese una nuevo turno: " << endl;
+            cout << "I\tngrese una nuevo turno: " << endl;
             cin >> input_aux;
             appointment_list[pos_to_modify - 1].turno = stoi(input_aux);
+            cout << "\tTurno de cita modificado con exito !!!" << endl;
+            menu_moderator_user();
             break;
         case 5:
-            cout << "Ingrese una nueva especialidad: " << endl;
+            cout << "\tIngrese una nueva especialidad: " << endl;
             cin >> input_aux;
             appointment_list[pos_to_modify - 1].especialidad = input_aux;
+            cout << "\tEspecialidad de cita modificado con exito !!!" << endl;
+            menu_moderator_user();
             break;
         case 6:
-            cout << "Ingrese una nueva consultorio: " << endl;
+            cout << "\tIngrese una nueva consultorio: " << endl;
             cin >> input_aux;
             appointment_list[pos_to_modify - 1].consultorio = stoi(input_aux);
+            cout << "\tConsultorio de cita modificado con exito !!!" << endl;
+            menu_moderator_user();
             break;
         case 7:
-            cout << "Ingrese una nueva condicion de cita: " << endl;
+            cout << "\tIngrese una nueva condicion de cita: " << endl;
             cin >> input_aux;
             //Verificar condicion de cita valida 0 = Pendiente 1 = Aceptada 2 = No acpetada 3 = Concluida
             appointment_list[pos_to_modify - 1].condicion = stoi(input_aux);
+            cout << "\tCondicion de cita modificado con exito !!!" << endl;
+            menu_moderator_user();
+            break;
+        case 8:
+            cout << "Saliendo . . ." << endl;
+            //system("cls");
+            menu_moderator_user();
             break;
         default:
             cout << "Opcion invalida intente de nuevo: " << endl;
             break;
         }
-
     } while (!realizado);
 }
 
@@ -433,7 +527,7 @@ void addCita()
     if (user_list[UserID - 1].user_type != 0) //administrador
     {
         int cond_cita;
-        cout << "Condicion de la cita. Digite: 0 = Pendiente, 1 = Aceptada, 2 = No acpetada";
+        cout << "Condicion de la cita. Digite: 0 = Pendiente, 1 = Aceptada, 2 = No aceptada";
         cin >> cond_cita;
         appointment_list[arr_length_appointment_list].condicion = cond_cita;
         if (cond_cita != 0 || cond_cita != 1 || cond_cita != 2)
@@ -537,54 +631,62 @@ void menu_moderator_user()
     bool realizado = false;
     do
     {
-        cout << "Bienvenido "
-             << "Persona (Por cambiar a hacer referencia) " << endl;
-        cout << "1. Crear un cita" << endl;
-        cout << "2. Modificar una cita" << endl;
-        cout << "3. Aceptar citas pendienes" << endl;
-        cout << "4. Crear usuario" << endl; //AUN
-        cout << "5. Ver citas por paciente" << endl;
-        cout << "6. Ver todas las citas" << endl;
-        cout << "7. Ver los usuarios existentes" << endl;
+        cout << " Bienvenido " << user_list[UserID-1].nombre << " " << user_list[UserID-1].apellido << " !!!"<< endl;
+        cout << "\n\t1. Crear un cita" << endl;
+        cout << "\t2. Modificar una cita" << endl;
+        cout << "\t3. Aceptar citas pendienes" << endl;
+        cout << "\t4. Crear usuario" << endl; //AUN
+        cout << "\t5. Ver citas por paciente" << endl;
+        cout << "\t6. Ver todas las citas" << endl;
+        cout << "\t7. Ver los usuarios existentes" << endl;
+        cout << "\t8. Salir" << endl;
         cin >> menu_aux;
 
         switch (menu_aux)
         {
         case 1:
-            cout << "Crear un Cita!: " << endl;
+            cout << "CREAR CITA" << endl;
+            system("cls");
             addCita();
             realizado = true;
             break;
         case 2:
-            cout << "Modificar una cita!" << endl;
+            cout << "MODIFICAR UNA CITA" << endl;
+            system("cls");
             modify();
             realizado = true;
             break;
         case 3:
-            cout << "Ver las citas pendientes por aceptar" << endl;
+            cout << "CITAS PENDIENTES" << endl;
+            system("cls");
             select_citas_pendientes();
             realizado = true;
             break;
         case 4:
-            cout << "Crear un uusario" << endl;
+            cout << "CREAR USUARIO" << endl;
 
             realizado = true;
             break;
         case 5:
-            cout << "Ver citas por paciente" << endl;
+            cout << "CITAS POR PACIENTE" << endl;
+            system("cls");
+            select_all_citas_pacientes();
             realizado = true;
             break;
         case 6:
-            cout << "Ver citas por paciente" << endl;
-
+            cout << "TODAS LAS CITAS " << endl;
+            system("cls");
+            select_citas();
             realizado = true;
             break;
         case 7:
-            cout << "Ver todas las citas" << endl;
-
+            cout << "USUARIOS EXISTENTES" << endl;
             realizado = true;
             break;
-
+        case 8:
+            cout << "Saliendo . . ." << endl;
+            realizado = true;
+            break;
         default:
             cout << "Opcion invalida intente de nuevo: " << endl;
             break;
