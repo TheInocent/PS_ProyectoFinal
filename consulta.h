@@ -51,7 +51,7 @@ void login();
 void select_cita_paciente(int);
 void select_cita_paciente_pendiente (int);
 void basic_user_modify();
-void list_citas();
+void select_citas();
 void moderator_user_modify();
 void modify();
 void addCita();
