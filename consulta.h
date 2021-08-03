@@ -3,7 +3,8 @@
 #include <cstdlib>
 #include <fstream>
 #include <stdlib.h> 
-
+#include "stdlib.h"
+#include "string.h"
 using namespace std;
 
 //Variable global de el ID del usuario logeado
@@ -62,3 +63,5 @@ void menu_moderator_user();
 void register_user();
 void sign_up(int t);
 void init_program();
+int parse(const char);
+int getValue();
