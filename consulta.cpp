@@ -94,7 +94,7 @@ void users_load_one_user(int posicion, string linea) //Para modificar
 
     for (int i = 0; i < tam; i++)
     {
-        if (linea[i] == '&')
+        if (linea[i] == '$')
         {
             posf = i - 1;
             aux = linea.substr(posi, (posf - posi + 1));
@@ -182,7 +182,6 @@ void login()
             if (user_list[i].username == usuario && user_list[i].password == clave)
             {
                 UserID = user_list[i].user_id;
-                cout << "\nUsuario encontrado";
                 //usuario encontrado
                 encontrado = true;
                 break;
@@ -220,6 +219,7 @@ void select_cita_paciente(int id_paciente)
                 break;
             }
             cout << "\tFecha: " << appointment_list[i].dia << appointment_list[i].mes << appointment_list[i].anio << endl;
+            cout << "\n";
         }
     }
     cout << "======================================================================" << endl;
@@ -248,7 +248,7 @@ void basic_user_modify()
     int pos_to_modify = -1;
     int menu_aux;
     string input_aux;
-    bool realizado = true;
+    bool bucle = true;
 
     select_cita_paciente_pendiente(UserID);
     cout << "Seleccione la ID de la cita a modificar (Solo se muestran las citas pendientes)" << endl;
@@ -261,6 +261,7 @@ void basic_user_modify()
         cout << "2. Mes" << endl;
         cout << "3. Hora" << endl;
         cout << "4. Especialidad" << endl;
+        cout << "5. Atras" << endl;
         cin >> menu_aux;
 
         switch (menu_aux)
@@ -285,20 +286,24 @@ void basic_user_modify()
             cin >> input_aux;
             appointment_list[pos_to_modify - 1].especialidad = input_aux;
             break;
-
+        case 5:
+            cout << "Volviendo atras ..." << endl;
+            bucle = false;
+            system("cls");
+            break;
         default:
             cout << "Opcion invalida intente de nuevo: " << endl;
             break;
         }
 
-    } while (!realizado);
+    } while (bucle);
 }
 void change_appointment_condition()
 {
     int pos_to_modify = -1;
     int menu_aux;
     int input_aux;
-    bool realizado = false;
+    bool bucle = true;
     cout << "\n\tSeleccione el ID de la cita a cambiar condicion" << endl;
     cin >> pos_to_modify;
     do
@@ -315,21 +320,20 @@ void change_appointment_condition()
             appointment_list[pos_to_modify - 1].condicion = input_aux;
             cout << "\tCondicion de cita cambiada con exito !!!" << endl;
             system("cls");
-            menu_moderator_user();
             break;
         }
         else if (input_aux == 4)
         {
             cout << "\tSaliendo ..." << endl;
+            bucle = false;
             system("cls");
-            menu_moderator_user();
             break;
         }
         else
         {
             cout << "\tOpcion invalida intente de nuevo . . . " << endl;
         }
-    } while (!realizado);
+    } while (bucle);
 }
 void select_all_citas_pacientes()
 {
@@ -340,7 +344,6 @@ void select_all_citas_pacientes()
     }
     system("pause");
     system("cls");
-    menu_moderator_user();
 }
 void select_citas_pendientes()
 {
@@ -403,6 +406,16 @@ void select_citas()
         }
         cout << "==================================================================" << endl;
     }
+}
+void show_all_users()
+{
+    cout << "\n\tUsuarios Actuales";
+    for (int i = 0; i < arr_length_user_list; i++)
+    {
+        cout << "\n- " << user_list[i].nombre << "\t" << user_list[i].apellido << "\t" << user_list[i].username << "\t" << user_list[i].user_type;
+    }
+    cout << "\n"
+         << endl;
 }
 
 void moderator_user_modify()
@@ -483,7 +496,6 @@ void moderator_user_modify()
         }
     } while (!realizado);
     system("cls");
-    menu_moderator_user();
 }
 
 void modify()
@@ -521,7 +533,7 @@ void addCita()
     cout << "\tIngrese hora de la cita: ";
     cin >> appointment_list[arr_length_appointment_list].hora;
     cout << "\tIngrese la especialidad a la que se desea ir: ";
-    cin >> appointment_list[arr_length_appointment_list].especialidad;
+    cin >> appointment_list[arr_length_appointment_list].especialidad; //No reconoce si ingresa con espacios
     cout << "\tIngrese número de consultorio al cual acudir ";
     cin >> appointment_list[arr_length_appointment_list].consultorio;
     if (user_list[UserID - 1].user_type != 0) //administrador
@@ -543,12 +555,11 @@ void addCita()
     }
     arr_length_appointment_list++;
     system("cls");
-    menu_moderator_user();
 }
 
 void load_program_menus()
 {
-    cout << "EL usuario es: " << user_list[UserID - 1].nombre << " con " << user_list[UserID - 1].user_type << endl;
+    system("cls");
     if (user_list[UserID - 1].user_type == 0) //Usuario Normal
     {
         menu_normal_user();
@@ -561,9 +572,10 @@ void load_program_menus()
 
 void end_session()
 {
-    ofstream escritura;
-    escritura.open("citas.txt", ios::out);
-    if (escritura.fail())
+    //ARCHIVO DE CITAS
+    ofstream escritura_citas;
+    escritura_citas.open("citas.txt", ios::out);
+    if (escritura_citas.fail())
     {
         cout << "No se puedo abrir el archivo para guardar" << endl;
         exit(1);
@@ -573,64 +585,92 @@ void end_session()
     {
         if (i == arr_length_appointment_list - 1)
         {
-            escritura << appointment_list[i].id_cita << "$" << appointment_list[i].id_paciente << "$" << appointment_list[i].dia << "$" << appointment_list[i].mes << "$" << appointment_list[i].anio << "$" << appointment_list[i].hora << "$" << appointment_list[i].especialidad << "$" << appointment_list[i].consultorio << "$" << appointment_list[i].condicion << "$";
+            escritura_citas << appointment_list[i].id_cita << "$" << appointment_list[i].id_paciente << "$" << appointment_list[i].dia << "$" << appointment_list[i].mes << "$" << appointment_list[i].anio << "$" << appointment_list[i].hora << "$" << appointment_list[i].especialidad << "$" << appointment_list[i].consultorio << "$" << appointment_list[i].condicion << "$";
         }
         else
         {
-            escritura << appointment_list[i].id_cita << "$" << appointment_list[i].id_paciente << "$" << appointment_list[i].dia << "$" << appointment_list[i].mes << "$" << appointment_list[i].anio << "$" << appointment_list[i].hora << "$" << appointment_list[i].especialidad << "$" << appointment_list[i].consultorio << "$" << appointment_list[i].condicion << "$" << endl;
+            escritura_citas << appointment_list[i].id_cita << "$" << appointment_list[i].id_paciente << "$" << appointment_list[i].dia << "$" << appointment_list[i].mes << "$" << appointment_list[i].anio << "$" << appointment_list[i].hora << "$" << appointment_list[i].especialidad << "$" << appointment_list[i].consultorio << "$" << appointment_list[i].condicion << "$" << endl;
         }
     }
-    escritura.close();
+    escritura_citas.close();
+
+    // 5&luis&padro&987654321&juan@unsa.edu.pe&CalleCusco&luis&luis123&0&
+    //ARCHIVO DE USUARIOS
+    ofstream escritura_usuarios;
+    escritura_usuarios.open("datos.txt", ios::out);
+    if (escritura_usuarios.fail())
+    {
+        cout << "No se puedo abrir el archivo para guardar" << endl;
+        exit(1);
+    }
+
+    for (int i = 0; i < arr_length_user_list; i++)
+    {
+        if (i == arr_length_user_list - 1)
+        {
+            escritura_usuarios << user_list[i].user_id << "$" << user_list[i].nombre << "$" << user_list[i].apellido << "$" << user_list[i].telefono << "$" << user_list[i].email << "$" << user_list[i].direccion << "$" << user_list[i].username << "$" << user_list[i].password << "$" << user_list[i].user_type << "$";
+        }
+        else
+        {
+            escritura_usuarios << user_list[i].user_id << "$" << user_list[i].nombre << "$" << user_list[i].apellido << "$" << user_list[i].telefono << "$" << user_list[i].email << "$" << user_list[i].direccion << "$" << user_list[i].username << "$" << user_list[i].password << "$" << user_list[i].user_type << "$" << endl;
+        }
+    }
+    escritura_usuarios.close();
 }
 
 void menu_normal_user()
 {
     int menu_aux;
-    bool realizado = false;
+    bool bucle = true;
     do
     {
-        cout << "Hola " << user_list[arr_length_user_list].nombre << " " << user_list[arr_length_user_list].apellido << "!" << endl;
+        cout << " \n\tBienvenido " << user_list[UserID - 1].nombre << " " << user_list[UserID - 1].apellido << " !!!" << endl;
         cout << "1. Crear un cita" << endl;
         cout << "2. Modificar una cita pendiente" << endl;
         cout << "3. Ver mis citas pendientes" << endl;
         cout << "4. Ver mi historial de citas" << endl;
+        cout << "5. Salir" << endl;
+        cout << "Ingresar opcion: ";
         cin >> menu_aux;
-
+        system("cls");
         switch (menu_aux)
         {
         case 1:
             cout << "Crear un Cita!: " << endl;
             addCita();
-            realizado = true;
             break;
         case 2:
             cout << "Modificar una cita!" << endl;
             modify();
-            realizado = true;
             break;
         case 3:
             cout << "Ver mis citas pendientes" << endl;
             select_cita_paciente_pendiente(UserID);
-            realizado = true;
+            system("pause");
+            system("cls");
             break;
         case 4:
             cout << "Ver mi historial de citas" << endl;
             select_cita_paciente(UserID);
-            realizado = true;
+            system("pause");
+            system("cls");
             break;
-
+        case 5:
+            cout << "Salir..." << endl;
+            bucle = false;
+            break;
         default:
             cout << "Opcion invalida intente de nuevo: " << endl;
             break;
         }
 
-    } while (!realizado);
+    } while (bucle);
 }
 
 void menu_moderator_user()
 {
     int menu_aux;
-    bool realizado = false;
+    bool bucle = true;
     do
     {
         cout << " \n\tBienvenido " << user_list[UserID - 1].nombre << " " << user_list[UserID - 1].apellido << " !!!" << endl;
@@ -642,6 +682,7 @@ void menu_moderator_user()
         cout << "\t6. Ver todas las citas" << endl;
         cout << "\t7. Ver los usuarios existentes" << endl;
         cout << "\t8. Salir" << endl;
+        cout << "Ingresar una opcion: ";
         cin >> menu_aux;
 
         switch (menu_aux)
@@ -651,63 +692,63 @@ void menu_moderator_user()
             cout << "\t\tCREAR CITA\n"
                  << endl;
             addCita();
-            realizado = true;
             break;
         case 2:
             system("cls");
             cout << "\t\tMODIFICAR UNA CITA\n"
                  << endl;
             modify();
-            realizado = true;
             break;
         case 3:
             system("cls");
             cout << "\t\tCITAS PENDIENTES\n"
                  << endl;
             select_citas_pendientes();
-            realizado = true;
             break;
         case 4:
             cout << "\t\tCREAR USUARIO\n"
                  << endl;
-            realizado = true;
+            system("cls");
+            register_user();
             break;
         case 5:
             system("cls");
             cout << "\t\tCITAS POR PACIENTE\n"
                  << endl;
             select_all_citas_pacientes();
-            realizado = true;
             break;
         case 6:
             system("cls");
             cout << "\t\tTODAS LAS CITAS\n " << endl;
             select_citas();
-            realizado = true;
             system("pause");
             system("cls");
-            menu_moderator_user();
             break;
         case 7:
+            system("cls");
             cout << "\t\tUSUARIOS EXISTENTES\n"
                  << endl;
-            realizado = true;
+            // listar usuarios existentes
+            show_all_users();
+            system("pause");
+            system("cls");
             break;
         case 8:
             cout << "\tSaliendo . . .\n"
                  << endl;
-            realizado = true;
+            bucle = false;
             break;
         default:
             cout << "Opcion invalida intente de nuevo: " << endl;
             break;
         }
 
-    } while (!realizado);
+    } while (bucle);
 }
 void register_user()
 {
     int opcion;
+    bool bucle = true;
     do
     {
         cout << "(1) Registrarse paciente (2) Registrarse enfermera (3) Salir \nElige: ";
@@ -715,66 +756,43 @@ void register_user()
         switch (opcion)
         {
         case 1: //Cliente
-            sign_up(1);
-            break;
-        case 2: //Administrador
             sign_up(0);
             break;
+        case 2: //Administrador
+            sign_up(1);
+            break;
         case 3:
+            bucle = false;
             break;
         default: // exit
             cout << "Solo se puede ingregsar opciones validas " << endl;
             break;
         }
-    } while (opcion != 3);
+    } while (bucle);
+    system("cls");
 }
+
 void sign_up(int t)
 {
-    ifstream lectura;
-    lectura.open("datos.txt", ios::in);
-    int count = 0;
-    string texto1;
-
-    if (lectura.is_open())
-    {
-        while (!lectura.eof())
-        {
-            getline(lectura, texto1);
-            count++;
-        }
-    }
-    else
-    {
-        cout << "No se pudo abrir el archivo o aun no ha sido creado" << endl;
-    }
-    cout << count;
-    lectura.close();
-    ofstream archivo;
-    archivo.open("datos.txt", ios::app);
-    string texto;
-    User u;
-    u.user_id = count;
+    cout << "============== Registrar Usuario ==============" << endl;
+    user_list[arr_length_user_list].user_id = arr_length_user_list + 1;
     cout << "\nDigite el nombre de usario: ";
-    cin >> u.nombre;
+    cin >> user_list[arr_length_user_list].nombre;
     cout << "\nDigite el apellido de usario: ";
-    cin >> u.apellido;
+    cin >> user_list[arr_length_user_list].apellido;
     cout << "\nDigite el telefono de usario: ";
-    cin >> u.telefono;
+    cin >> user_list[arr_length_user_list].telefono;
     cout << "\nDigite el correo de usario: ";
-    cin >> u.email;
-    cout << "\nDigite el nombre de usario: ";
-    cin >> u.direccion;
-    cout << "\nDigite el nombre de usario: ";
-    cin >> u.username;
-    cout << "\nDigite el nombre de usario: ";
-    cin >> u.password;
-    u.user_type = t;
-    texto = to_string(u.user_id) + "$" + u.nombre + "$" + u.apellido + "$" +
-            u.telefono + "$" + u.email + "$" + u.direccion + "$" +
-            u.username + "$" + u.password + "$" + to_string(u.user_type) + "$";
-    cout << texto << endl;
-    archivo << texto << endl;
-    archivo.close();
+    cin >> user_list[arr_length_user_list].email;
+    cout << "\nDigite el direccion de usario: ";
+    cin >> user_list[arr_length_user_list].direccion;
+    cout << "\nDigite el username de usario: ";
+    cin >> user_list[arr_length_user_list].username;
+    cout << "\nDigite una clave: ";
+    cin >> user_list[arr_length_user_list].password;
+    user_list[arr_length_user_list].user_type = t;
+    arr_length_user_list ++;
+    system("cls");
 }
 void init_program()
 {
