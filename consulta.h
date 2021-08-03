@@ -59,4 +59,6 @@ void load_program_menus();
 void end_session();
 void menu_normal_user();
 void menu_moderator_user();
+void register_user();
+void sign_up(int t);
 void init_program();

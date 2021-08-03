@@ -705,7 +705,77 @@ void menu_moderator_user()
 
     } while (!realizado);
 }
+void register_user()
+{
+    int opcion;
+    do
+    {
+        cout << "(1) Registrarse paciente (2) Registrarse enfermera (3) Salir \nElige: ";
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1: //Cliente
+            sign_up(1);
+            break;
+        case 2: //Administrador
+            sign_up(0);
+            break;
+        case 3:
+            break;
+        default: // exit
+            cout << "Solo se puede ingregsar opciones validas " << endl;
+            break;
+        }
+    } while (opcion != 3);
+}
+void sign_up(int t)
+{
+    ifstream lectura;
+    lectura.open("datos.txt", ios::in);
+    int count = 0;
+    string texto1;
 
+    if (lectura.is_open())
+    {
+        while (!lectura.eof())
+        {
+            getline(lectura, texto1);
+            count++;
+        }
+    }
+    else
+    {
+        cout << "No se pudo abrir el archivo o aun no ha sido creado" << endl;
+    }
+    cout << count;
+    lectura.close();
+    ofstream archivo;
+    archivo.open("datos.txt", ios::app);
+    string texto;
+    User u;
+    u.user_id = count;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.nombre;
+    cout << "\nDigite el apellido de usario: ";
+    cin >> u.apellido;
+    cout << "\nDigite el telefono de usario: ";
+    cin >> u.telefono;
+    cout << "\nDigite el correo de usario: ";
+    cin >> u.email;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.direccion;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.username;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.password;
+    u.user_type = t;
+    texto = to_string(u.user_id) + "$" + u.nombre + "$" + u.apellido + "$" +
+            u.telefono + "$" + u.email + "$" + u.direccion + "$" +
+            u.username + "$" + u.password + "$" + to_string(u.user_type) + "$";
+    cout << texto << endl;
+    archivo << texto << endl;
+    archivo.close();
+}
 void init_program()
 {
     appointment_data_load();
