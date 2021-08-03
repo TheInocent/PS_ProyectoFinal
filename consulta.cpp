@@ -293,7 +293,8 @@ void basic_user_modify()
 
     } while (!realizado);
 }
-void change_appointment_condition() {
+void change_appointment_condition()
+{
     int pos_to_modify = -1;
     int menu_aux;
     int input_aux;
@@ -302,13 +303,14 @@ void change_appointment_condition() {
     cin >> pos_to_modify;
     do
     {
-        cout << "\n\tA que condicion quiere cambiar la cita \n" << endl;
+        cout << "\n\tA que condicion quiere cambiar la cita \n"
+             << endl;
         cout << "\t1. Aceptada" << endl;
         cout << "\t2. No aceptada" << endl;
         cout << "\t3. Concluida" << endl;
         cout << "\t4. Salir" << endl;
         cin >> input_aux;
-        if (input_aux == 1 || input_aux == 2 || input_aux == 3 ) 
+        if (input_aux == 1 || input_aux == 2 || input_aux == 3)
         {
             appointment_list[pos_to_modify - 1].condicion = input_aux;
             cout << "\tCondicion de cita cambiada con exito !!!" << endl;
@@ -323,13 +325,14 @@ void change_appointment_condition() {
             menu_moderator_user();
             break;
         }
-        else 
+        else
         {
             cout << "\tOpcion invalida intente de nuevo . . . " << endl;
         }
     } while (!realizado);
 }
-void select_all_citas_pacientes() {
+void select_all_citas_pacientes()
+{
     for (int i = 0; i < arr_length_user_list; i++)
     {
         cout << "\tPaciente: " << user_list[i].nombre << " " << user_list[i].apellido << endl;
@@ -403,7 +406,7 @@ void select_citas()
 }
 
 void moderator_user_modify()
-{   
+{
     select_citas();
     int pos_to_modify = -1;
     int menu_aux;
@@ -413,7 +416,8 @@ void moderator_user_modify()
     cin >> pos_to_modify;
     do
     {
-        cout << "\t¿Que dato desea modificar?\n" << endl;
+        cout << "\t¿Que dato desea modificar?\n"
+             << endl;
         cout << "\t1. Dia" << endl;
         cout << "\t2. Mes" << endl;
         cout << "\t3. Hora" << endl;
@@ -421,7 +425,8 @@ void moderator_user_modify()
         cout << "\t5. Especialidad" << endl;
         cout << "\t6. Consultorio" << endl;
         cout << "\t7. Condicion" << endl;
-        cout << "\t8. Salir\n" << endl;
+        cout << "\t8. Salir\n"
+             << endl;
         cin >> menu_aux;
         switch (menu_aux)
         {
@@ -522,7 +527,7 @@ void addCita()
     if (user_list[UserID - 1].user_type != 0) //administrador
     {
         int cond_cita;
-        cout << "Condicion de la cita. Digite: 0 = Pendiente, 1 = Aceptada, 2 = No aceptada " ;
+        cout << "Condicion de la cita. Digite: 0 = Pendiente, 1 = Aceptada, 2 = No aceptada ";
         cin >> cond_cita;
         appointment_list[arr_length_appointment_list].condicion = cond_cita;
         if (cond_cita != 0 || cond_cita != 1 || cond_cita != 2)
@@ -543,7 +548,7 @@ void addCita()
 
 void load_program_menus()
 {
-     cout << "EL usuario es: " << user_list[UserID-1].nombre << " con "  << user_list[UserID - 1].user_type << endl;
+    cout << "EL usuario es: " << user_list[UserID - 1].nombre << " con " << user_list[UserID - 1].user_type << endl;
     if (user_list[UserID - 1].user_type == 0) //Usuario Normal
     {
         menu_normal_user();
@@ -628,7 +633,7 @@ void menu_moderator_user()
     bool realizado = false;
     do
     {
-        cout << " \n\tBienvenido " << user_list[UserID-1].nombre << " " << user_list[UserID-1].apellido << " !!!"<< endl;
+        cout << " \n\tBienvenido " << user_list[UserID - 1].nombre << " " << user_list[UserID - 1].apellido << " !!!" << endl;
         cout << "\n\t1. Crear un cita" << endl;
         cout << "\t2. Modificar una cita" << endl;
         cout << "\t3. Aceptar citas pendienes" << endl;
@@ -642,30 +647,35 @@ void menu_moderator_user()
         switch (menu_aux)
         {
         case 1:
-            system("cls");  
-            cout << "\t\tCREAR CITA\n" << endl;
+            system("cls");
+            cout << "\t\tCREAR CITA\n"
+                 << endl;
             addCita();
             realizado = true;
             break;
         case 2:
             system("cls");
-            cout << "\t\tMODIFICAR UNA CITA\n" << endl;
+            cout << "\t\tMODIFICAR UNA CITA\n"
+                 << endl;
             modify();
             realizado = true;
             break;
         case 3:
             system("cls");
-            cout << "\t\tCITAS PENDIENTES\n" << endl;
+            cout << "\t\tCITAS PENDIENTES\n"
+                 << endl;
             select_citas_pendientes();
             realizado = true;
             break;
         case 4:
-            cout << "\t\tCREAR USUARIO\n" << endl;
+            cout << "\t\tCREAR USUARIO\n"
+                 << endl;
             realizado = true;
             break;
         case 5:
             system("cls");
-            cout << "\t\tCITAS POR PACIENTE\n" << endl;
+            cout << "\t\tCITAS POR PACIENTE\n"
+                 << endl;
             select_all_citas_pacientes();
             realizado = true;
             break;
@@ -679,11 +689,13 @@ void menu_moderator_user()
             menu_moderator_user();
             break;
         case 7:
-            cout << "\t\tUSUARIOS EXISTENTES\n" << endl;
+            cout << "\t\tUSUARIOS EXISTENTES\n"
+                 << endl;
             realizado = true;
             break;
         case 8:
-            cout << "\tSaliendo . . .\n" << endl;
+            cout << "\tSaliendo . . .\n"
+                 << endl;
             realizado = true;
             break;
         default:
@@ -693,7 +705,77 @@ void menu_moderator_user()
 
     } while (!realizado);
 }
+void register_user()
+{
+    int opcion;
+    do
+    {
+        cout << "(1) Registrarse paciente (2) Registrarse enfermera (3) Salir \nElige: ";
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1: //Cliente
+            sign_up(1);
+            break;
+        case 2: //Administrador
+            sign_up(0);
+            break;
+        case 3:
+            break;
+        default: // exit
+            cout << "Solo se puede ingregsar opciones validas " << endl;
+            break;
+        }
+    } while (opcion != 3);
+}
+void sign_up(int t)
+{
+    ifstream lectura;
+    lectura.open("datos.txt", ios::in);
+    int count = 0;
+    string texto1;
 
+    if (lectura.is_open())
+    {
+        while (!lectura.eof())
+        {
+            getline(lectura, texto1);
+            count++;
+        }
+    }
+    else
+    {
+        cout << "No se pudo abrir el archivo o aun no ha sido creado" << endl;
+    }
+    cout << count;
+    lectura.close();
+    ofstream archivo;
+    archivo.open("datos.txt", ios::app);
+    string texto;
+    User u;
+    u.user_id = count;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.nombre;
+    cout << "\nDigite el apellido de usario: ";
+    cin >> u.apellido;
+    cout << "\nDigite el telefono de usario: ";
+    cin >> u.telefono;
+    cout << "\nDigite el correo de usario: ";
+    cin >> u.email;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.direccion;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.username;
+    cout << "\nDigite el nombre de usario: ";
+    cin >> u.password;
+    u.user_type = t;
+    texto = to_string(u.user_id) + "$" + u.nombre + "$" + u.apellido + "$" +
+            u.telefono + "$" + u.email + "$" + u.direccion + "$" +
+            u.username + "$" + u.password + "$" + to_string(u.user_type) + "$";
+    cout << texto << endl;
+    archivo << texto << endl;
+    archivo.close();
+}
 void init_program()
 {
     appointment_data_load();
